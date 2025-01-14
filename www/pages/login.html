@@ -1,0 +1,23 @@
+<div class="login-container">
+  <h2>Login</h2>
+  <form id="loginForm" onsubmit="login(event)">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" />
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" />
+    </div>
+    <button type="submit">Login</button>
+  </form>
+</div>
+
+<script>
+  (function () {
+    const token = localStorage.getItem("token");
+    if (token) {
+      renderPage("home");
+    }
+  })();
+</script>
