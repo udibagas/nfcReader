@@ -2,12 +2,24 @@ const token = localStorage.getItem("token");
 let user = localStorage.getItem("user");
 user = user ? JSON.parse(user) : null;
 renderPage(token ? "home" : "login");
-// renderPage("home");
 
 document.addEventListener("deviceready", ondDeviceReady);
 
 function setLocation(location) {
-  document.querySelector("#location").innerHTML = location;
+  localStorage.setItem("location", location);
+
+  const locationElement = document.querySelector("#location");
+  locationElement.innerHTML = location;
+  locationElement.classList.remove("error");
+  locationElement.classList.add("success");
+
+  // reset location after 15 minutes
+  setTimeout(() => {
+    localStorage.removeItem("location");
+    locationElement.innerHTML = "[TEMPEL NFC]";
+    locationElement.classList.remove("success");
+    locationElement.classList.add("error");
+  }, 1000 * 60 * 15);
 }
 
 function ondDeviceReady() {
@@ -75,7 +87,32 @@ async function login(event) {
     localStorage.setItem("user", JSON.stringify(user));
     renderPage("home");
   } catch (error) {
-    alert(error.stack);
-    // document.querySelector("#error").innerHTML = JSON.stringify(error);
+    alert(error.message);
   }
+}
+
+function logout() {
+  const confirmLogout = confirm("Are you sure you want to logout?");
+  if (!confirmLogout) return;
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  localStorage.removeItem("location");
+  renderPage("login");
+}
+
+function takePicture() {
+  navigator.camera.getPicture(
+    (imageData) => {
+      // alert(imageData);
+      var image = document.querySelector("#myImage");
+      image.src = imageData;
+    },
+    (message) => {
+      alert("Gagal ambil gambar: " + message);
+    },
+    {
+      quality: 50,
+      destinationType: Camera.DestinationType.DATA_URL,
+    }
+  );
 }

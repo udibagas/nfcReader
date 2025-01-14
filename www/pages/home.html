@@ -1,11 +1,11 @@
 <div class="container">
-  <header>
-    <h1>USG PATROLI</h1>
-
-    <div>Welcome <span id="user"></span></div>
-  </header>
-  <div>
-    <p>Templekan NFC untuk mengeset lokasi Anda:</p>
-    <div id="location">[BELUM DISET]</div>
+  <div style="margin-top: 20px">
+    <h1 class="text-primary">USG PATROLI</h1>
+    <div>Selamat Datang, <span id="user"></span>!</div>
   </div>
+
+  <div id="location" class="error">[TEMPEL NFC]</div>
+  <img src="" id="myImage" alt="Captured Image" />
+  <button class="primary" onclick="takePicture()">Ambil Gambar</button>
+  <button class="danger" onclick="logout()">KELUAR</button>
 </div>

@@ -18,4 +18,5 @@
         <access origin="*" />
         <allow-intent href="market:*" />
     </platform>
+    <plugin name="cordova-plugin-camera" spec="^8.0.0" />
 </widget>
