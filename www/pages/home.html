@@ -1,11 +1,66 @@
 <div class="container">
   <div style="margin-top: 20px">
     <h1 class="text-primary">USG PATROLI</h1>
-    <div>Selamat Datang, <span id="user"></span>!</div>
   </div>
 
-  <div id="location" class="error">[TEMPEL NFC]</div>
-  <img src="" id="myImage" alt="Captured Image" />
-  <button class="primary" onclick="takePicture()">Ambil Gambar</button>
+  <form onsubmit="submitReport(event)" id="reportForm">
+    <p>
+      <label for="location">Lokasi:</label>
+      <input
+        type="text"
+        id="location"
+        name="location"
+        class="error"
+        value="[TEMPEL NFC]"
+        disabled
+      />
+    </p>
+
+    <p>
+      <label for="keterangan">Keterangan:</label>
+      <input type="checkbox" name="keterangan" value="Aktifitas nihil" />
+      Aktifitas nihil <br />
+      <input
+        type="checkbox"
+        name="keterangan"
+        value="Penerangan malam berfungsi baik
+"
+      />
+      Penerangan malam berfungsi baik
+      <br />
+      <input
+        type="checkbox"
+        name="keterangan"
+        value="Situasi aman
+"
+      />
+      Situasi aman
+      <br />
+      <input
+        type="checkbox"
+        name="keterangan"
+        value="Tidak ada hal - hal yang mencurigakan"
+      />
+      Tidak ada hal - hal yang mencurigakan <br />
+    </p>
+
+    <p>
+      <label for="keteranganTambahan">Keterangan Tambahan:</label>
+      <textarea name="keteranganTambahan" id="keteranganTambahan"></textarea>
+    </p>
+
+    <p>
+      <img id="myImage" alt="Captured Image" style="width: 100%" />
+    </p>
+
+    <p>
+      <button class="primary" onclick="takePicture(event)">Ambil Gambar</button>
+    </p>
+
+    <p>
+      <button class="primary" type="submit">Kirim Laporan</button>
+    </p>
+  </form>
+
   <button class="danger" onclick="logout()">KELUAR</button>
 </div>

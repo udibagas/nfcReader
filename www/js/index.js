@@ -9,17 +9,17 @@ function setLocation(location) {
   localStorage.setItem("location", location);
 
   const locationElement = document.querySelector("#location");
-  locationElement.innerHTML = location;
+  locationElement.value = location;
   locationElement.classList.remove("error");
   locationElement.classList.add("success");
 
-  // reset location after 15 minutes
+  // reset location after 5 minutes
   setTimeout(() => {
     localStorage.removeItem("location");
-    locationElement.innerHTML = "[TEMPEL NFC]";
+    locationElement.value = "[TEMPEL NFC]";
     locationElement.classList.remove("success");
     locationElement.classList.add("error");
-  }, 1000 * 60 * 15);
+  }, 1000 * 60 * 5);
 }
 
 function ondDeviceReady() {
@@ -100,11 +100,13 @@ function logout() {
   renderPage("login");
 }
 
-function takePicture() {
+function takePicture(event) {
+  event.preventDefault();
+
   navigator.camera.getPicture(
     (imageData) => {
       // alert(imageData);
-      var image = document.querySelector("#myImage");
+      const image = document.getElementById("myImage");
       image.src = imageData;
     },
     (message) => {
@@ -115,4 +117,47 @@ function takePicture() {
       destinationType: Camera.DestinationType.DATA_URL,
     }
   );
+}
+
+async function submitReport(event) {
+  event.preventDefault();
+  const token = localStorage.getItem("token");
+  const location = localStorage.getItem("location");
+
+  const keteranganTambahan = document.querySelector(
+    "#keteranganTambahan"
+  ).value;
+
+  const checkboxes = Array.from(document.getElementsByName("keterangan"));
+  const result = checkboxes
+    .filter((checkbox) => checkbox.checked)
+    .map((checkbox) => checkbox.value);
+
+  result.push(keteranganTambahan);
+  const report = { location, result: result.join() };
+
+  try {
+    const res = await fetch("http://192.168.1.10:3000/api/inspections", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(report),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to submit report");
+    }
+
+    const data = await res.json();
+    alert("Laporan berhasil dikirim");
+    // alert(JSON.stringify(data));
+    const locationElement = document.querySelector("#location");
+    locationElement.classList.remove("success");
+    locationElement.classList.add("error");
+    document.querySelector("#reportForm").reset();
+  } catch (error) {
+    alert(error.message);
+  }
 }
