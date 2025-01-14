@@ -2,6 +2,7 @@ const token = localStorage.getItem("token");
 let user = localStorage.getItem("user");
 user = user ? JSON.parse(user) : null;
 renderPage(token ? "home" : "login");
+// renderPage("home");
 
 document.addEventListener("deviceready", ondDeviceReady);
 
@@ -54,9 +55,9 @@ async function renderPage(page = "home") {
 
 async function login(event) {
   event.preventDefault();
-  const username = document.querySelector("#username").value;
+  const email = document.querySelector("#username").value;
   const password = document.querySelector("#password").value;
-  const credentials = { username, password, role: "user" };
+  const credentials = { email, password, role: "user" };
 
   try {
     const response = await fetch("http://192.168.1.10:3000/api/login", {

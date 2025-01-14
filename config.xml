@@ -6,7 +6,8 @@
         MitraTeknik Dev Team
     </author>
     <content src="index.html" />
-    <access origin="*" />
+    <access origin="*" allows-local-networking='true' />
+    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
