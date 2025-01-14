@@ -75,7 +75,7 @@ async function login(event) {
     localStorage.setItem("user", JSON.stringify(user));
     renderPage("home");
   } catch (error) {
-    alert(error.message);
-    document.querySelector("#error").innerHTML = JSON.stringify(error);
+    alert(error.stack);
+    // document.querySelector("#error").innerHTML = JSON.stringify(error);
   }
 }
