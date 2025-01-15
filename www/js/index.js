@@ -202,8 +202,13 @@ async function submitReport(event) {
   formData.append("result", result.join());
   formData.append("file", imageBlob, "image.jpg");
 
+  const submitButton = document.querySelector("#submitReportButton");
+
   try {
-    const res = await fetch(`{API_URL}/api/inspections`, {
+    submitButton.disabled = true;
+    submitButton.textContent = "Mengirim laporan...";
+
+    const res = await fetch(`${API_URL}/api/inspections`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -213,13 +218,16 @@ async function submitReport(event) {
 
     if (res.ok) {
       alert("Laporan berhasil dikirim");
-      renderPage("home");
+      resetForm();
     } else {
-      alert("Gagal mengirim laporan");
+      const data = await res.json();
+      throw new Error(data.message);
     }
   } catch (error) {
-    console.error("Error submitting report:", error);
-    alert("Gagal mengirim laporan");
+    alert(error.message);
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Kirim Laporan";
   }
 }
 
