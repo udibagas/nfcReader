@@ -60,6 +60,15 @@ async function renderPage(page = "home") {
     if (!response.ok) throw new Error("Page not found");
     const content = await response.text();
     app.innerHTML = content;
+
+    if (page == "home") {
+      try {
+        const user = JSON.parse(localStorage.getItem("user"));
+        document.querySelector("#user").innerHTML = user.name;
+      } catch (error) {
+        alert(error.message);
+      }
+    }
   } catch (error) {
     app.innerHTML = `<h1>404</h1><p>Page not found</p>`;
   }
@@ -91,8 +100,9 @@ async function login(event) {
   }
 }
 
-function logout() {
-  const confirmLogout = confirm("Are you sure you want to logout?");
+function logout(event) {
+  event.preventDefault();
+  const confirmLogout = confirm("Anda yakin akan keluar dari aplikasi ini?");
   if (!confirmLogout) return;
   localStorage.removeItem("token");
   localStorage.removeItem("user");
@@ -105,25 +115,40 @@ function takePicture(event) {
 
   navigator.camera.getPicture(
     (imageData) => {
-      // alert(imageData);
-      const image = document.getElementById("myImage");
+      const image = document.querySelector("#myImage");
       image.src = imageData;
+      image.classList.remove("hidden");
+      document.querySelector("#image").value = imageData;
     },
     (message) => {
       alert("Gagal ambil gambar: " + message);
     },
     {
-      quality: 50,
+      quality: 30,
       destinationType: Camera.DestinationType.DATA_URL,
     }
   );
 }
 
+function base64ToBlob(base64, mime) {
+  const byteString = atob(base64.split(",")[1]);
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mime });
+}
+
 async function submitReport(event) {
   event.preventDefault();
+
+  const confirmSubmit = confirm("Anda yakin akan mengirim laporan ini?");
+  if (!confirmSubmit) return;
+
   const token = localStorage.getItem("token");
   const location = localStorage.getItem("location");
-
+  const image = document.querySelector("#image").value;
   const keteranganTambahan = document.querySelector(
     "#keteranganTambahan"
   ).value;
@@ -134,30 +159,40 @@ async function submitReport(event) {
     .map((checkbox) => checkbox.value);
 
   result.push(keteranganTambahan);
-  const report = { location, result: result.join() };
+
+  // Convert base64 image data to Blob
+  const imageBlob = base64ToBlob(image, "image/jpeg");
+
+  const formData = new FormData();
+  formData.append("location", location);
+  formData.append("result", result.join());
+  formData.append("file", imageBlob, "image.jpg");
 
   try {
     const res = await fetch("http://192.168.1.10:3000/api/inspections", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(report),
+      body: formData,
     });
 
-    if (!res.ok) {
-      throw new Error("Failed to submit report");
+    if (res.ok) {
+      alert("Laporan berhasil dikirim");
+      renderPage("home");
+    } else {
+      alert("Gagal mengirim laporan");
     }
-
-    const data = await res.json();
-    alert("Laporan berhasil dikirim");
-    // alert(JSON.stringify(data));
-    const locationElement = document.querySelector("#location");
-    locationElement.classList.remove("success");
-    locationElement.classList.add("error");
-    document.querySelector("#reportForm").reset();
   } catch (error) {
-    alert(error.message);
+    console.error("Error submitting report:", error);
+    alert("Gagal mengirim laporan");
   }
+}
+
+function resetForm() {
+  const locationElement = document.querySelector("#location");
+  locationElement.classList.remove("success");
+  locationElement.classList.add("error");
+  document.querySelector("#reportForm").reset();
+  document.querySelector("#myImage").classList.add("hidden");
 }

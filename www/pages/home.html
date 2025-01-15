@@ -1,10 +1,12 @@
 <div class="container">
-  <div style="margin-top: 20px">
-    <h1 class="text-primary">USG PATROLI</h1>
+  <div class="header">
+    <h1>PATROLI USG</h1>
   </div>
 
+  <div class="text-center mt-20">Selamat Pagi <span id="user"></span>!</div>
+
   <form onsubmit="submitReport(event)" id="reportForm">
-    <p>
+    <div class="form-group">
       <label for="location">Lokasi:</label>
       <input
         type="text"
@@ -14,9 +16,9 @@
         value="[TEMPEL NFC]"
         disabled
       />
-    </p>
+    </div>
 
-    <p>
+    <div class="form-group">
       <label for="keterangan">Keterangan:</label>
       <input type="checkbox" name="keterangan" value="Aktifitas nihil" />
       Aktifitas nihil <br />
@@ -42,25 +44,33 @@
         value="Tidak ada hal - hal yang mencurigakan"
       />
       Tidak ada hal - hal yang mencurigakan <br />
-    </p>
+    </div>
 
-    <p>
+    <div class="form-group">
       <label for="keteranganTambahan">Keterangan Tambahan:</label>
       <textarea name="keteranganTambahan" id="keteranganTambahan"></textarea>
-    </p>
+    </div>
 
-    <p>
-      <img id="myImage" alt="Captured Image" style="width: 100%" />
-    </p>
+    <div class="form-group">
+      <input type="hidden" id="image" name="image" />
+      <img
+        id="myImage"
+        alt="Captured Image"
+        style="width: 100%"
+        class="hidden"
+      />
+    </div>
 
-    <p>
-      <button class="primary" onclick="takePicture(event)">Ambil Gambar</button>
-    </p>
+    <div class="form-group">
+      <button class="outline" onclick="takePicture(event)">Ambil Gambar</button>
+    </div>
 
-    <p>
+    <div class="form-group">
       <button class="primary" type="submit">Kirim Laporan</button>
-    </p>
-  </form>
+    </div>
 
-  <button class="danger" onclick="logout()">KELUAR</button>
+    <div class="form-group">
+      <button class="danger" onclick="logout(event)">KELUAR</button>
+    </div>
+  </form>
 </div>

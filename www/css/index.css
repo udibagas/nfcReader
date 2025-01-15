@@ -4,26 +4,19 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
-.container {
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    width: 370px;
-    box-sizing: content-box;
+.container .header {
+    text-align: center;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
 }
 
-header h1 {
+.header h1 {
     margin: 0;
-    font-size: 2em;
-    color: #007bff;
+    padding: 0;
+    font-size: 1.5rem;
 }
 
 main p {
@@ -45,12 +38,12 @@ main p {
 }
 
 .login-container {
-    padding: 20px;
     width: 300px;
+    margin: 100px auto 0;
 }
 
 .login-container h2 {
-    margin: 0 0 20px;
+    margin: 0 0 100px;
     font-size: 1.5em;
     color: #007bff;
 }
@@ -59,7 +52,7 @@ main p {
     margin-bottom: 15px;
 }
 
-.form-group label, #reportForm label {
+.form-group label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
@@ -108,4 +101,23 @@ input[type="checkbox"] {
     margin-right: 5px;
     width: 25px;
     height: 25px;
+}
+
+button.outline {
+    background-color: transparent;
+    border: 1px solid #007bff;
+    color: #007bff;
+}
+
+#reportForm {
+    width: 360px;
+    margin: 30px auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.mt-20 {
+    margin-top: 20px;
 }
