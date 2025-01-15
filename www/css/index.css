@@ -58,6 +58,14 @@ main p {
     font-weight: bold;
 }
 
+.form-check-label {
+    display: inline-block !important;
+    margin-bottom: 0 !important;
+    font-weight: normal !important;
+    line-height: 25px;
+    margin: 0;
+}
+
 .form-group input, #reportForm input[type="text"], #reportForm textarea {
     width: 100%;
     padding: 8px;
@@ -97,6 +105,10 @@ button:hover {
     color: #007bff;
 }
 
+.text-bold {
+    font-weight: bold;
+}
+
 input[type="checkbox"] {
     margin-right: 5px;
     width: 25px;
@@ -120,4 +132,30 @@ button.outline {
 
 .mt-20 {
     margin-top: 20px;
+}
+
+button .send {
+    button.send::before {
+        content: "\1F4E4"; /* Unicode for the send icon */
+        margin-right: 8px;
+    }
+}
+
+button .exit {
+    button.exit::before {
+        content: "\1F6AA"; /* Unicode for the exit icon */
+        margin-right: 8px;
+    }
+}
+
+button .camera {
+    button.camera::before {
+        content: "\1F4F7"; /* Unicode for the camera icon */
+        margin-right: 8px;
+    }
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
 }

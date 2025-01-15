@@ -1,3 +1,4 @@
+const API_URL = "http://192.168.1.10:3000";
 const token = localStorage.getItem("token");
 let user = localStorage.getItem("user");
 user = user ? JSON.parse(user) : null;
@@ -68,6 +69,39 @@ async function renderPage(page = "home") {
       } catch (error) {
         alert(error.message);
       }
+
+      const response = await fetch(`${API_URL}/api/inspection-templates`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      const templates = await response.json();
+      const templateElement = document.querySelector("#template");
+
+      templates.forEach((template) => {
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `template-${template.id}`;
+        checkbox.name = "keterangan";
+        checkbox.value = template.result;
+
+        const label = document.createElement("label");
+        label.className = "form-check-label";
+        label.htmlFor = `template-${template.id}`;
+        label.appendChild(document.createTextNode(template.result));
+
+        const div = document.createElement("div");
+        div.className = "form-check";
+        div.appendChild(checkbox);
+        div.appendChild(label);
+
+        templateElement.appendChild(div);
+      });
     }
   } catch (error) {
     app.innerHTML = `<h1>404</h1><p>Page not found</p>`;
@@ -81,7 +115,7 @@ async function login(event) {
   const credentials = { email, password, role: "user" };
 
   try {
-    const response = await fetch("http://192.168.1.10:3000/api/login", {
+    const response = await fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
@@ -169,7 +203,7 @@ async function submitReport(event) {
   formData.append("file", imageBlob, "image.jpg");
 
   try {
-    const res = await fetch("http://192.168.1.10:3000/api/inspections", {
+    const res = await fetch(`{API_URL}/api/inspections`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

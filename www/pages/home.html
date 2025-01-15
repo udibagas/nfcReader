@@ -3,7 +3,9 @@
     <h1>PATROLI USG</h1>
   </div>
 
-  <div class="text-center mt-20">Selamat Pagi <span id="user"></span>!</div>
+  <div class="text-center mt-20 text-bold">
+    Selamat Pagi <span id="user"></span>!
+  </div>
 
   <form onsubmit="submitReport(event)" id="reportForm">
     <div class="form-group">
@@ -20,30 +22,7 @@
 
     <div class="form-group">
       <label for="keterangan">Keterangan:</label>
-      <input type="checkbox" name="keterangan" value="Aktifitas nihil" />
-      Aktifitas nihil <br />
-      <input
-        type="checkbox"
-        name="keterangan"
-        value="Penerangan malam berfungsi baik
-"
-      />
-      Penerangan malam berfungsi baik
-      <br />
-      <input
-        type="checkbox"
-        name="keterangan"
-        value="Situasi aman
-"
-      />
-      Situasi aman
-      <br />
-      <input
-        type="checkbox"
-        name="keterangan"
-        value="Tidak ada hal - hal yang mencurigakan"
-      />
-      Tidak ada hal - hal yang mencurigakan <br />
+      <div id="template"></div>
     </div>
 
     <div class="form-group">
@@ -62,15 +41,17 @@
     </div>
 
     <div class="form-group">
-      <button class="outline" onclick="takePicture(event)">Ambil Gambar</button>
+      <button class="outline camera" onclick="takePicture(event)">
+        Ambil Gambar
+      </button>
     </div>
 
     <div class="form-group">
-      <button class="primary" type="submit">Kirim Laporan</button>
+      <button class="primary send" type="submit">Kirim Laporan</button>
     </div>
 
     <div class="form-group">
-      <button class="danger" onclick="logout(event)">KELUAR</button>
+      <button class="danger exit" onclick="logout(event)">KELUAR</button>
     </div>
   </form>
 </div>
