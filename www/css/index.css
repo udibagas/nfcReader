@@ -164,3 +164,15 @@ button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+#imageList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+}
+
+.thumbnail {
+    width: 100px;
+    height: 100px;
+}

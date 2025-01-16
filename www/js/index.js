@@ -1,6 +1,7 @@
 const API_URL = "http://192.168.1.10:3000";
 const token = localStorage.getItem("token");
 let user = localStorage.getItem("user");
+const dataTransfer = new DataTransfer();
 user = user ? JSON.parse(user) : null;
 renderPage(token ? "home" : "login");
 
@@ -72,7 +73,7 @@ async function renderPage(page = "home") {
 
       const response = await fetch(`${API_URL}/api/inspection-templates`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
@@ -149,10 +150,23 @@ function takePicture(event) {
 
   navigator.camera.getPicture(
     (imageData) => {
-      const image = document.querySelector("#myImage");
-      image.src = imageData;
-      image.classList.remove("hidden");
-      document.querySelector("#image").value = imageData;
+      const imageBlob = base64ToBlob(imageData, "image/jpeg");
+
+      // Create a File object from the Blob
+      const file = new File([imageBlob], "image.jpeg", { type: "image/jpeg" });
+
+      // Create a DataTransfer object and add the File object to it
+      dataTransfer.items.add(file);
+
+      // Set the file input element's files property to the DataTransfer's files
+      const fileInput = document.querySelector("#imageFileInput");
+      fileInput.files = dataTransfer.files;
+
+      const imageList = document.querySelector("#imageList");
+      const img = document.createElement("img");
+      img.src = imageData;
+      img.classList.add("thumbnail");
+      imageList.appendChild(img);
     },
     (message) => {
       alert("Gagal ambil gambar: " + message);
@@ -182,7 +196,6 @@ async function submitReport(event) {
 
   const token = localStorage.getItem("token");
   const location = localStorage.getItem("location");
-  const image = document.querySelector("#image").value;
   const keteranganTambahan = document.querySelector(
     "#keteranganTambahan"
   ).value;
@@ -194,13 +207,15 @@ async function submitReport(event) {
 
   result.push(keteranganTambahan);
 
-  // Convert base64 image data to Blob
-  const imageBlob = base64ToBlob(image, "image/jpeg");
-
   const formData = new FormData();
   formData.append("location", location);
   formData.append("result", result.join());
-  formData.append("file", imageBlob, "image.jpg");
+
+  const fileInput = document.querySelector("#imageFileInput");
+
+  Array.from(fileInput.files).forEach((file) => {
+    formData.append(`images[]`, file);
+  });
 
   const submitButton = document.querySelector("#submitReportButton");
 
@@ -210,9 +225,7 @@ async function submitReport(event) {
 
     const res = await fetch(`${API_URL}/api/inspections`, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
       body: formData,
     });
 
@@ -236,5 +249,6 @@ function resetForm() {
   locationElement.classList.remove("success");
   locationElement.classList.add("error");
   document.querySelector("#reportForm").reset();
-  document.querySelector("#myImage").classList.add("hidden");
+  document.querySelector("#imageList").innerHTML = "";
+  dataTransfer.items.clear();
 }
