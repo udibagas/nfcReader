@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.1.10:3000";
+const API_URL = "http://192.168.1.6:3000";
 const token = localStorage.getItem("token");
 let user = localStorage.getItem("user");
 const dataTransfer = new DataTransfer();
@@ -67,6 +67,7 @@ async function renderPage(page = "home") {
       try {
         const user = JSON.parse(localStorage.getItem("user"));
         document.querySelector("#user").innerHTML = user.name;
+        document.querySelector("#site").innerHTML = user.Site?.name;
       } catch (error) {
         alert(error.message);
       }
@@ -111,9 +112,9 @@ async function renderPage(page = "home") {
 
 async function login(event) {
   event.preventDefault();
-  const email = document.querySelector("#username").value;
+  const name = document.querySelector("#username").value;
   const password = document.querySelector("#password").value;
-  const credentials = { email, password, role: "user" };
+  const credentials = { name, password };
 
   try {
     const response = await fetch(`${API_URL}/api/login`, {
@@ -174,6 +175,8 @@ function takePicture(event) {
     {
       quality: 30,
       destinationType: Camera.DestinationType.DATA_URL,
+      correctOrientation: true,
+      cameraDirection: Camera.Direction.BACK,
     }
   );
 }
