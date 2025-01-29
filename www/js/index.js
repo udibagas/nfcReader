@@ -30,6 +30,7 @@ function ondDeviceReady() {
     },
     function (error) {
       alert("Aktifkan NFC dan buka aplikasi ini lagi!");
+      navigator.app.exitApp();
     }
   );
 }
