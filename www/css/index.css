@@ -75,7 +75,7 @@ main p {
     font-size: large;
 }
 
-button {
+button, .button {
     padding: 10px 20px;
     color: #fff;
     border: none;

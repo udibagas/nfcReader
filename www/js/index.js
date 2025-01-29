@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.1.6:3000";
+const API_URL = "http://192.168.1.99:3000";
 const token = localStorage.getItem("token");
 let user = localStorage.getItem("user");
 const dataTransfer = new DataTransfer();
@@ -6,6 +6,33 @@ user = user ? JSON.parse(user) : null;
 renderPage(token ? "home" : "login");
 
 document.addEventListener("deviceready", ondDeviceReady);
+
+function ondDeviceReady() {
+  nfc.addNdefListener(
+    function (nfcEvent) {
+      const tag = nfcEvent.tag;
+      const ndefMessage = tag.ndefMessage;
+
+      if (ndefMessage && ndefMessage.length > 0) {
+        const payload = nfc.bytesToString(ndefMessage[0].payload);
+
+        // Remove the language code prefix (if any)
+        const location =
+          payload[0] === "\u0002" ? payload.substring(3) : payload;
+
+        setLocation(location);
+      } else {
+        alert("NFC tag masih kosong!");
+      }
+    },
+    function () {
+      console.log("Listening for NDEF tags...");
+    },
+    function (error) {
+      alert("Aktifkan NFC dan buka aplikasi ini lagi!");
+    }
+  );
+}
 
 function setLocation(location) {
   localStorage.setItem("location", location);
@@ -22,36 +49,6 @@ function setLocation(location) {
     locationElement.classList.remove("success");
     locationElement.classList.add("error");
   }, 1000 * 60 * 5);
-}
-
-function ondDeviceReady() {
-  // Add listener for NDEF tags
-  nfc.addNdefListener(
-    function (nfcEvent) {
-      // Get the NFC tag data
-      const tag = nfcEvent.tag;
-      const ndefMessage = tag.ndefMessage;
-
-      // Decode the payload
-      if (ndefMessage && ndefMessage.length > 0) {
-        const payload = nfc.bytesToString(ndefMessage[0].payload);
-
-        // Remove the language code prefix (if any)
-        const location =
-          payload[0] === "\u0002" ? payload.substring(3) : payload;
-
-        setLocation(location);
-      } else {
-        alert("Empty NFC tag detected!");
-      }
-    },
-    function () {
-      console.log("Listening for NDEF tags...");
-    },
-    function (error) {
-      alert("Error adding NFC listener:", error);
-    }
-  );
 }
 
 async function renderPage(page = "home") {
