@@ -205,7 +205,10 @@ async function submitReport(event) {
     .filter((checkbox) => checkbox.checked)
     .map((checkbox) => checkbox.value);
 
-  result.push(keteranganTambahan);
+  // push only if keteranganTambahan is not empty
+  if (keteranganTambahan) {
+    result.push(keteranganTambahan);
+  }
 
   const formData = new FormData();
   formData.append("location", location);
