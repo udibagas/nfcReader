@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 const Register = () => {
   const navigate = useNavigate();
   const [sites, setSites] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getSites().then((data) => {
@@ -25,6 +26,7 @@ const Register = () => {
       confirmText: "Ya",
       cancelText: "Tidak",
       onConfirm: () => {
+        setLoading(true);
         register(values)
           .then(() => {
             Dialog.alert({
@@ -40,6 +42,9 @@ const Register = () => {
               content: error.response?.data?.message || error.message,
               confirmText: "OK",
             });
+          })
+          .finally(() => {
+            setLoading(false);
           });
       },
     });
@@ -65,7 +70,14 @@ const Register = () => {
         }}
         footer={
           <>
-            <Button color="primary" size="large" block type="submit">
+            <Button
+              color="primary"
+              size="large"
+              block
+              type="submit"
+              loading={loading}
+              loadingText="Mengirim data..."
+            >
               DAFTAR
             </Button>
 

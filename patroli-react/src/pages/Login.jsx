@@ -2,11 +2,14 @@ import { Navigate, useNavigate } from "react-router";
 import { login } from "../utils/api";
 import { Button, Dialog, Divider, Form, Input } from "antd-mobile";
 import { LockOutline, UserOutline } from "antd-mobile-icons";
+import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleFinish = async (values) => {
+    setLoading(true);
     try {
       await login(values);
       navigate("/");
@@ -16,6 +19,8 @@ const Login = () => {
         content: error.response?.data?.message || error.message,
         confirmText: "OK",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,7 +44,14 @@ const Login = () => {
         }}
         footer={
           <>
-            <Button color="primary" size="large" block type="submit">
+            <Button
+              color="primary"
+              size="large"
+              block
+              type="submit"
+              loading={loading}
+              loadingText="Mengirim data..."
+            >
               LOGIN
             </Button>
 

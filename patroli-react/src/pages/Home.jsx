@@ -15,13 +15,15 @@ import { CameraOutline } from "antd-mobile-icons";
 import Clock from "../components/Clock";
 
 const Home = () => {
-  const [template, setTemplate] = useState([]);
   const user = JSON.parse(localStorage.getItem("user") || null);
-  const [location, setLocation] = useState("");
-  const [form] = Form.useForm();
-  const [images, setImages] = useState([]);
-  const files = useRef([]);
 
+  const [template, setTemplate] = useState([]);
+  const [location, setLocation] = useState("");
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [form] = Form.useForm();
+  const files = useRef([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -80,6 +82,7 @@ const Home = () => {
       cancelText: "Tidak",
       confirmText: "Ya",
       onConfirm: () => {
+        setLoading(true);
         saveData({ ...values, location }, files.current)
           .then(() => {
             form.resetFields();
@@ -99,6 +102,9 @@ const Home = () => {
               content: error.response?.data?.message || error.message,
               confirmText: "OK",
             });
+          })
+          .finally(() => {
+            setLoading(false);
           });
       },
     });
@@ -113,8 +119,7 @@ const Home = () => {
       onConfirm: () => {
         logout()
           .then(() => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
+            console.log("Logout success");
           })
           .catch((error) => {
             Dialog.alert({
@@ -124,6 +129,8 @@ const Home = () => {
             });
           })
           .finally(() => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
             navigate("/login");
           });
       },
@@ -192,7 +199,14 @@ const Home = () => {
               >
                 <CameraOutline />
               </Button>
-              <Button color="primary" block size="large" type="submit">
+              <Button
+                color="primary"
+                block
+                size="large"
+                type="submit"
+                loading={loading}
+                loadingText="Mengirim data..."
+              >
                 SIMPAN
               </Button>
             </>
