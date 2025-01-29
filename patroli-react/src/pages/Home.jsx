@@ -7,11 +7,19 @@ import {
   Checkbox,
   Space,
   Dialog,
+  Image,
 } from "antd-mobile";
 import { Navigate, useNavigate } from "react-router";
 import { base64ToBlob, getTemplates, logout, saveData } from "../utils/api";
 import { useState, useEffect, useRef } from "react";
 import { CameraOutline } from "antd-mobile-icons";
+
+// const demoImages = [
+//   "https://images.unsplash.com/photo-1620476214170-1d8080f65cdb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3150&q=80",
+//   "https://images.unsplash.com/photo-1601128533718-374ffcca299b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3128&q=80",
+//   "https://images.unsplash.com/photo-1567945716310-4745a6b7844b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3113&q=80",
+//   "https://images.unsplash.com/photo-1624993590528-4ee743c9896e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=1000&q=80",
+// ];
 
 const Home = () => {
   const [template, setTemplate] = useState([]);
@@ -78,7 +86,7 @@ const Home = () => {
       cancelText: "Tidak",
       confirmText: "Ya",
       onConfirm: () => {
-        saveData(values)
+        saveData(values, files.current)
           .then(() => {
             form.resetFields();
             setImages([]);
@@ -212,6 +220,23 @@ const Home = () => {
           <Form.Item name="keteranganTambahan" label="Keterangan Tambahan">
             <TextArea placeholder="Keterangan Tambahan" rows={2} />
           </Form.Item>
+
+          {images.length > 0 && (
+            <Form.Item label="Foto">
+              <Space direction="horizontal" wrap>
+                {images.map((image, index) => (
+                  <Image
+                    key={index}
+                    src={image}
+                    alt="preview"
+                    width={100}
+                    height={100}
+                    fit="cover"
+                  />
+                ))}
+              </Space>
+            </Form.Item>
+          )}
         </Form>
       </div>
     </div>

@@ -43,7 +43,7 @@ export async function getUser() {
   return data;
 }
 
-export function saveData(data) {
+export function saveData(data, files) {
   const { location, keterangan, keteranganTambahan } = data;
 
   if (keteranganTambahan) {
@@ -51,7 +51,18 @@ export function saveData(data) {
   }
 
   const result = keterangan.join(",");
-  return axiosInstance.post(`/api/inspections`, { location, result });
+
+  const formData = new FormData();
+  formData.append("location", location);
+  formData.append("keterangan", result);
+
+  if (files.length > 0) {
+    files.forEach((file) => {
+      formData.append("images[]", file);
+    });
+  }
+
+  return axiosInstance.post(`/api/inspections`, formData);
 }
 
 export function getTemplates() {
