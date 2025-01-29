@@ -1,6 +1,5 @@
 import {
   Form,
-  Input,
   NavBar,
   TextArea,
   Button,
@@ -13,18 +12,11 @@ import { Navigate, useNavigate } from "react-router";
 import { base64ToBlob, getTemplates, logout, saveData } from "../utils/api";
 import { useState, useEffect, useRef } from "react";
 import { CameraOutline } from "antd-mobile-icons";
-
-// const demoImages = [
-//   "https://images.unsplash.com/photo-1620476214170-1d8080f65cdb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3150&q=80",
-//   "https://images.unsplash.com/photo-1601128533718-374ffcca299b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3128&q=80",
-//   "https://images.unsplash.com/photo-1567945716310-4745a6b7844b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3113&q=80",
-//   "https://images.unsplash.com/photo-1624993590528-4ee743c9896e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=200&h=1000&q=80",
-// ];
+import Clock from "../components/Clock";
 
 const Home = () => {
   const [template, setTemplate] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user")).name;
-  const site = JSON.parse(localStorage.getItem("user")).Site.name;
+  const user = JSON.parse(localStorage.getItem("user") || null);
   const [location, setLocation] = useState("");
   const [form] = Form.useForm();
   const [images, setImages] = useState([]);
@@ -52,7 +44,11 @@ const Home = () => {
           const l = payload[0] === "\u0002" ? payload.substring(3) : payload;
           setLocation(l);
         } else {
-          alert("NFC tag masih kosong!");
+          Dialog.alert({
+            title: "Error",
+            content: "Tag NFC tidak valid!",
+            confirmText: "OK",
+          });
         }
       },
       function () {
@@ -64,8 +60,6 @@ const Home = () => {
           content: "Aktifkan NFC dan buka aplikasi ini lagi!",
           confirmText: "OK",
         });
-
-        navigator.app.exitApp();
       }
     );
 
@@ -86,13 +80,20 @@ const Home = () => {
       cancelText: "Tidak",
       confirmText: "Ya",
       onConfirm: () => {
-        saveData(values, files.current)
+        saveData({ ...values, location }, files.current)
           .then(() => {
             form.resetFields();
-            setImages([]);
             files.current = [];
+            setLocation("");
+            setImages([]);
+            Dialog.alert({
+              title: "Sukses",
+              content: "Data berhasil disimpan!",
+              confirmText: "OK",
+            });
           })
           .catch((error) => {
+            console.log(error);
             Dialog.alert({
               title: "Error",
               content: error.response?.data?.message || error.message,
@@ -114,14 +115,16 @@ const Home = () => {
           .then(() => {
             localStorage.removeItem("token");
             localStorage.removeItem("user");
-            navigate("/login");
           })
           .catch((error) => {
             Dialog.alert({
-              title: "Logout Gagal",
+              title: "Error",
               content: error.response?.data?.message || error.message,
               confirmText: "OK",
             });
+          })
+          .finally(() => {
+            navigate("/login");
           });
       },
     });
@@ -169,7 +172,8 @@ const Home = () => {
 
       <div className="main-content">
         <div className="header-container">
-          <h3>Selamat Pagi {user}!</h3>
+          <h2>Selamat Pagi {user ? user.name : ""}!</h2>
+          <Clock />
         </div>
 
         <Form
@@ -181,28 +185,29 @@ const Home = () => {
               <Button
                 style={{ marginBottom: 15 }}
                 block
+                size="large"
                 color="primary"
                 fill="outline"
                 onClick={takePicture}
               >
                 <CameraOutline />
               </Button>
-              <Button color="primary" block type="submit">
+              <Button color="primary" block size="large" type="submit">
                 SIMPAN
               </Button>
             </>
           }
         >
-          <Form.Item label="Site">
-            <Input placeholder="Site" value={site} disabled />
-          </Form.Item>
-
-          <Form.Item
-            name="location"
-            label="Lokasi"
-            rules={[{ required: true, message: "Masukkan lokasi!" }]}
-          >
-            <Input placeholder="Lokasi" value={location} />
+          <Form.Item label="Lokasi">
+            {location ? (
+              <div style={{ fontWeight: "bold", color: "green" }}>
+                {location}
+              </div>
+            ) : (
+              <div style={{ fontWeight: "bold", color: "red" }}>
+                Tempel NFC Tag
+              </div>
+            )}
           </Form.Item>
 
           <Form.Item name="keterangan" label="Keterangan">
@@ -218,7 +223,10 @@ const Home = () => {
           </Form.Item>
 
           <Form.Item name="keteranganTambahan" label="Keterangan Tambahan">
-            <TextArea placeholder="Keterangan Tambahan" rows={2} />
+            <TextArea
+              placeholder="Tulis keterangan tambahan jika ada"
+              rows={2}
+            />
           </Form.Item>
 
           {images.length > 0 && (

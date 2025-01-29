@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://localhost:3000";
+const API_URL = "http://192.168.1.6:3000";
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -23,15 +23,13 @@ export async function login({ name, password }) {
   localStorage.setItem("user", JSON.stringify(user));
 }
 
-export async function register(name, password, SiteId) {
-  const { data } = await axiosInstance.post(`/api/register`, {
+export function register({ name, password, SiteId }) {
+  return axiosInstance.post(`/api/register`, {
     name,
     password,
     SiteId,
+    role: "user",
   });
-  const { token, user } = data;
-  localStorage.setItem("token", token);
-  localStorage.setItem("user", JSON.stringify(user));
 }
 
 export function logout() {
@@ -43,18 +41,21 @@ export async function getUser() {
   return data;
 }
 
-export function saveData(data, files) {
-  const { location, keterangan, keteranganTambahan } = data;
+export async function saveData(data, files) {
+  const { location, keterangan = [], keteranganTambahan } = data;
+
+  if (!location) {
+    throw new Error("Lokasi harus diisi!");
+  }
 
   if (keteranganTambahan) {
     keterangan.push(keteranganTambahan);
   }
 
-  const result = keterangan.join(",");
-
+  const result = keterangan.join();
   const formData = new FormData();
   formData.append("location", location);
-  formData.append("keterangan", result);
+  formData.append("result", result);
 
   if (files.length > 0) {
     files.forEach((file) => {
@@ -67,6 +68,19 @@ export function saveData(data, files) {
 
 export function getTemplates() {
   return axiosInstance.get(`/api/inspection-templates`);
+}
+
+export async function getSites() {
+  const { data } = await axiosInstance.post("/graphql", {
+    query: `{ 
+      sites {
+        id
+        name
+      }
+    }`,
+  });
+
+  return data.data.sites;
 }
 
 export function base64ToBlob(base64, mime) {

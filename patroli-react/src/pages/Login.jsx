@@ -39,7 +39,7 @@ const Login = () => {
         }}
         footer={
           <>
-            <Button color="primary" block type="submit">
+            <Button color="primary" size="large" block type="submit">
               LOGIN
             </Button>
 
@@ -48,6 +48,7 @@ const Login = () => {
               block
               color="primary"
               fill="outline"
+              size="large"
               onClick={() => {
                 navigate("/register");
               }}

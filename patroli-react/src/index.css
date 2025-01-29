@@ -1,15 +1,11 @@
 body {
   margin: 0;
-  /* display: flex;
-  place-items: center;
-  min-width: 320px; */
   min-height: 100vh;
 }
 
 .login-container {
   padding: 10px;
-  /* background-color: #1C497F; */
-  background-color: #cfcfe1;
+  background-color: #fafafd;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -35,14 +31,9 @@ body {
   margin-top: 0;
 }
 
-.home-container {
-  /* background-color: #cfcfe1; */
-}
-
 .main-content {
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
   height: calc(100vh - 45px);
   flex-direction: column;
 }
