@@ -59,7 +59,7 @@ const Register = () => {
   };
 
   if (localStorage.getItem("token")) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return (
