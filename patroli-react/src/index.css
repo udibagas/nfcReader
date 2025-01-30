@@ -5,7 +5,7 @@ body {
 
 .login-container {
   padding: 10px;
-  /* background-color: #fafafd; */
+  /* background-color: #e3e3e6; */
   background: linear-gradient(to bottom, #3979c7, #fafafd);
   display: flex;
   flex-direction: column;
