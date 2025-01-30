@@ -82,28 +82,28 @@ const Home = () => {
   }, [location]);
 
   if (!localStorage.getItem("token")) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   function validateForm({ keterangan: result = [], keteranganTambahan }) {
-    if (!location) {
+    try {
+      if (!location) {
+        throw new Error("Tempelkan NFC Tag terlebih dahulu!");
+      }
+
+      if (keteranganTambahan) {
+        result.push(keteranganTambahan);
+      }
+
+      if (!result.length === 0) {
+        throw new Error(
+          "Pilih minimal satu keterangan atau tulis keterangan tambahan!"
+        );
+      }
+    } catch (error) {
       Dialog.alert({
         title: "Error",
-        content: "Tempelkan NFC Tag terlebih dahulu!",
-        confirmText: "OK",
-      });
-      return false;
-    }
-
-    if (keteranganTambahan) {
-      result.push(keteranganTambahan);
-    }
-
-    if (!result.length === 0) {
-      Dialog.alert({
-        title: "Error",
-        content:
-          "Pilih minimal satu keterangan atau tulis keterangan tambahan!",
+        content: error.message,
         confirmText: "OK",
       });
       return false;
