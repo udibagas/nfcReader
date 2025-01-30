@@ -13,7 +13,7 @@ const Login = () => {
     setLoading(true);
     try {
       await login(values);
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (error) {
       Dialog.alert({
         title: "Login Gagal",
