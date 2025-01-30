@@ -10,7 +10,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import "./App.css";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const App = () => {
   return (
@@ -24,11 +24,24 @@ const AnimatedRoutes = () => {
   const location = useLocation();
   const nodeRef = useRef(null);
 
+  useEffect(() => {
+    const handleBackButton = (event) => {
+      event.preventDefault();
+      navigator.app.exitApp();
+    };
+
+    document.addEventListener("backbutton", handleBackButton, false);
+
+    return () => {
+      document.removeEventListener("backbutton", handleBackButton, false);
+    };
+  }, []);
+
   return (
     <TransitionGroup>
       <CSSTransition
         key={location.key}
-        classNames="fade"
+        classNames="swap"
         timeout={300}
         nodeRef={nodeRef}
       >
