@@ -3,6 +3,7 @@ import { login } from "../utils/api";
 import { Button, Dialog, Divider, Form, Input } from "antd-mobile";
 import { LockOutline, UserOutline } from "antd-mobile-icons";
 import { useState } from "react";
+import ConenctionStatus from "../components/ConnectionStatus";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,6 +31,13 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      <ConenctionStatus
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+        }}
+      />
       <div className="header-container">
         <h1 className="header">APLIKASI PATROLI</h1>
         <h3>PT. Ungaran Sari Garments</h3>

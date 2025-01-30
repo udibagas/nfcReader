@@ -5,7 +5,8 @@ body {
 
 .login-container {
   padding: 10px;
-  background-color: #fafafd;
+  /* background-color: #fafafd; */
+  background: linear-gradient(to bottom, #3979c7, #fafafd);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -34,6 +35,6 @@ body {
 .main-content {
   display: flex;
   justify-content: space-between;
-  height: calc(100vh - 45px);
+  height: calc(100vh - 60px);
   flex-direction: column;
 }

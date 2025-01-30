@@ -1,5 +1,6 @@
 import axios from "axios";
-const API_URL = "http://192.168.1.99:3000";
+const API_URL = "http://192.168.1.6:3000";
+// const API_URL = "http://192.168.1.99:3000";
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -41,13 +42,10 @@ export async function getUser() {
   return data;
 }
 
-export async function saveData(data, files) {
-  const { location, keterangan = [], keteranganTambahan } = data;
-
-  if (!location) {
-    throw new Error("Lokasi harus diisi!");
-  }
-
+export async function saveData(
+  { location, keterangan = [], keteranganTambahan },
+  files
+) {
   if (keteranganTambahan) {
     keterangan.push(keteranganTambahan);
   }
@@ -81,6 +79,10 @@ export async function getSites() {
   });
 
   return data.data.sites;
+}
+
+export function checkConnection() {
+  return axiosInstance.get("/api/ping");
 }
 
 export function base64ToBlob(base64, mime) {

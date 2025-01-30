@@ -7,6 +7,7 @@ import {
   UserOutline,
 } from "antd-mobile-icons";
 import { useEffect, useState } from "react";
+import ConenctionStatus from "../components/ConnectionStatus";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,9 +15,16 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    let ignore = false;
+
     getSites().then((data) => {
+      if (ignore) return;
       setSites(data);
     });
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const handleFinish = async (values) => {
@@ -56,6 +64,20 @@ const Register = () => {
 
   return (
     <div className="login-container">
+      <ConenctionStatus
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+        }}
+        onConnected={() => {
+          if (!sites.length) {
+            getSites().then((data) => {
+              setSites(data);
+            });
+          }
+        }}
+      />
       <div className="header-container">
         <h1 className="header">APLIKASI PATROLI</h1>
         <h3>PT. Ungaran Sari Garments</h3>

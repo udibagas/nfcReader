@@ -1,6 +1,5 @@
 import {
   Form,
-  NavBar,
   TextArea,
   Button,
   Checkbox,
@@ -8,11 +7,12 @@ import {
   Dialog,
   Image,
 } from "antd-mobile";
-import { Navigate, useNavigate } from "react-router";
-import { base64ToBlob, getTemplates, logout, saveData } from "../utils/api";
+import { Navigate } from "react-router";
+import { base64ToBlob, getTemplates, saveData } from "../utils/api";
 import { useState, useEffect, useRef } from "react";
 import { CameraOutline } from "antd-mobile-icons";
 import Clock from "../components/Clock";
+import HomeNavBar from "../components/HomeNavBar";
 
 const Home = () => {
   const user = JSON.parse(localStorage.getItem("user") || null);
@@ -24,7 +24,6 @@ const Home = () => {
 
   const [form] = Form.useForm();
   const files = useRef([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     let ignore = false;
@@ -71,11 +70,52 @@ const Home = () => {
     };
   }, []);
 
+  // Clear location after 5 minutes
+  useEffect(() => {
+    let timeOut = setTimeout(() => {
+      if (location) setLocation("");
+    }, 1000 * 60 * 5);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [location]);
+
   if (!localStorage.getItem("token")) {
     return <Navigate to="/login" />;
   }
 
+  function validateForm({ keterangan: result = [], keteranganTambahan }) {
+    if (!location) {
+      Dialog.alert({
+        title: "Error",
+        content: "Tempelkan NFC Tag terlebih dahulu!",
+        confirmText: "OK",
+      });
+      return false;
+    }
+
+    if (keteranganTambahan) {
+      result.push(keteranganTambahan);
+    }
+
+    if (!result.length === 0) {
+      Dialog.alert({
+        title: "Error",
+        content:
+          "Pilih minimal satu keterangan atau tulis keterangan tambahan!",
+        confirmText: "OK",
+      });
+      return false;
+    }
+
+    return { location, result };
+  }
+
   function submitForm(values) {
+    const data = validateForm(values);
+    if (!data) return;
+
     Dialog.confirm({
       title: "Peringatan",
       content: "Apakah Anda yakin ingin menyimpan data?",
@@ -83,7 +123,7 @@ const Home = () => {
       confirmText: "Ya",
       onConfirm: () => {
         setLoading(true);
-        saveData({ ...values, location }, files.current)
+        saveData(data, files.current)
           .then(() => {
             form.resetFields();
             files.current = [];
@@ -105,33 +145,6 @@ const Home = () => {
           })
           .finally(() => {
             setLoading(false);
-          });
-      },
-    });
-  }
-
-  function handleLogout() {
-    Dialog.confirm({
-      title: "Peringatan",
-      content: "Apakah Anda yakin ingin keluar?",
-      cancelText: "Tidak",
-      confirmText: "Ya",
-      onConfirm: () => {
-        logout()
-          .then(() => {
-            console.log("Logout success");
-          })
-          .catch((error) => {
-            Dialog.alert({
-              title: "Error",
-              content: error.response?.data?.message || error.message,
-              confirmText: "OK",
-            });
-          })
-          .finally(() => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            navigate("/login");
           });
       },
     });
@@ -167,15 +180,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <NavBar
-        style={{
-          backgroundColor: "#1C497F",
-          color: "white",
-        }}
-        onBack={handleLogout}
-      >
-        SISTEM PATROLI USG
-      </NavBar>
+      <HomeNavBar />
 
       <div className="main-content">
         <div className="header-container">
