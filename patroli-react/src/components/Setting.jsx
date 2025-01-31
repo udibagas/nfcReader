@@ -1,9 +1,11 @@
 import { Form, NavBar, Input, Button, Dialog } from "antd-mobile";
 import { useNavigate } from "react-router";
 import { API_URL, checkConnection } from "../utils/api";
+import { useState } from "react";
 
 const Setting = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   function isValidURL(string) {
     try {
@@ -17,6 +19,8 @@ const Setting = () => {
 
   async function handleFormSubmit(values) {
     const { baseURL } = values;
+    setLoading(true);
+
     try {
       isValidURL(baseURL);
       localStorage.setItem("baseURL", baseURL);
@@ -32,6 +36,8 @@ const Setting = () => {
         content: error.message,
         confirmText: "OK",
       });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -66,7 +72,14 @@ const Setting = () => {
             width: "90%",
           }}
           footer={
-            <Button color="primary" block size="large" type="submit">
+            <Button
+              color="primary"
+              block
+              size="large"
+              type="submit"
+              loading={loading}
+              loadingText="Menyimpan"
+            >
               SIMPAN
             </Button>
           }
