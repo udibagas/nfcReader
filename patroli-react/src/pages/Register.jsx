@@ -6,14 +6,16 @@ import {
   LockOutline,
   UserOutline,
 } from "antd-mobile-icons";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ConenctionStatus from "../components/ConnectionStatus";
 import AppInfo from "../components/AppInfo";
+import ConnectionContext from "../context/ConnectionContext";
 
 const Register = () => {
   const navigate = useNavigate();
   const [sites, setSites] = useState([]);
   const [loading, setLoading] = useState(false);
+  const isConnected = useContext(ConnectionContext);
 
   useEffect(() => {
     let ignore = false;
@@ -27,6 +29,12 @@ const Register = () => {
       ignore = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (sites.length == 0 && isConnected) {
+      getSites().then((data) => setSites(data));
+    }
+  }, [isConnected, sites.length]);
 
   const handleFinish = async (values) => {
     Dialog.confirm({
@@ -70,13 +78,6 @@ const Register = () => {
           position: "absolute",
           top: 15,
           right: 15,
-        }}
-        onConnected={() => {
-          if (!sites.length) {
-            getSites().then((data) => {
-              setSites(data);
-            });
-          }
         }}
       />
 
