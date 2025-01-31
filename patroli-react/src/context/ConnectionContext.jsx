@@ -20,13 +20,7 @@ export const ConnectionProvider = ({ children }) => {
 
   return (
     <ConnectionContext.Provider value={isConnected}>
-      <ConenctionStatus
-        style={{
-          position: "absolute",
-          top: 25,
-          right: 25,
-        }}
-      />
+      <ConenctionStatus />
       {children}
     </ConnectionContext.Provider>
   );

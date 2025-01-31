@@ -1,8 +1,7 @@
 import { useContext } from "react";
-import PropTypes from "prop-types";
 import ConnectionContext from "../context/ConnectionContext";
 
-const ConenctionStatus = ({ style }) => {
+const ConenctionStatus = () => {
   const isConnected = useContext(ConnectionContext);
 
   const color = {
@@ -19,14 +18,12 @@ const ConenctionStatus = ({ style }) => {
         borderRadius: "50%",
         zIndex: 9999,
         backgroundColor: color[isConnected],
-        ...style,
+        position: "absolute",
+        top: 25,
+        right: 25,
       }}
     ></div>
   );
-};
-
-ConenctionStatus.propTypes = {
-  style: PropTypes.object,
 };
 
 export default ConenctionStatus;
