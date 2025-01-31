@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import { useEffect, useRef } from "react";
 import useLogout from "./hooks/useLogout";
 import "./App.css";
+import Setting from "./components/Setting";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const AnimatedRoutes = () => {
       if (location.pathname === "/") handleLogout();
       if (location.pathname === "/register") navigate("/login");
       if (location.pathname === "/login") navigator.app.exitApp();
+      if (location.pathname === "/setting") navigate(-1);
     }
 
     document.addEventListener("backbutton", handleBackButton, false);
@@ -56,6 +58,7 @@ const AnimatedRoutes = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/setting" element={<Setting />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>

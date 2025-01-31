@@ -126,10 +126,7 @@ const Home = () => {
         setLoading(true);
         saveData(data, files.current)
           .then(() => {
-            form.resetFields();
-            files.current = [];
-            setLocation("");
-            setImages([]);
+            resetForm();
             Dialog.alert({
               title: "Sukses",
               content: "Data berhasil disimpan!",

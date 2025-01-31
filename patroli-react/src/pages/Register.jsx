@@ -8,6 +8,7 @@ import {
 } from "antd-mobile-icons";
 import { useEffect, useState } from "react";
 import ConenctionStatus from "../components/ConnectionStatus";
+import AppInfo from "../components/AppInfo";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -78,10 +79,9 @@ const Register = () => {
           }
         }}
       />
-      <div className="header-container">
-        <h1 className="header">APLIKASI PATROLI</h1>
-        <h3>PT. Ungaran Sari Garments</h3>
-      </div>
+
+      <AppInfo />
+
       <Form
         layout="horizontal"
         mode="card"

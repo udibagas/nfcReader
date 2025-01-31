@@ -1,13 +1,13 @@
 import axios from "axios";
-const API_URL = "http://192.168.1.6:3000";
-// const API_URL = "http://192.168.1.99:3000";
 
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-});
+export const API_URL = "http://192.168.1.6:3000";
+
+const axiosInstance = axios.create();
 
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
+  config.baseURL = localStorage.getItem("baseURL") || API_URL;
+
   config.headers
     ? (config.headers.Authorization = `Bearer ${token}`)
     : (config.headers = config.headers || `Bearer ${token}`);
@@ -74,7 +74,7 @@ export async function getSites() {
 }
 
 export function checkConnection() {
-  return axiosInstance.get("/api/ping");
+  return axiosInstance.get("/api/ping", { timeout: 1000 });
 }
 
 export function base64ToBlob(base64, mime) {

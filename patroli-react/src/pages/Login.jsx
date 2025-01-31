@@ -1,8 +1,9 @@
-import { Navigate, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { login } from "../utils/api";
 import { Button, Dialog, Divider, Form, Input } from "antd-mobile";
-import { LockOutline, UserOutline } from "antd-mobile-icons";
+import { LockOutline, SetOutline, UserOutline } from "antd-mobile-icons";
 import { useState } from "react";
+import AppInfo from "../components/AppInfo";
 import ConenctionStatus from "../components/ConnectionStatus";
 
 const Login = () => {
@@ -31,17 +32,23 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      <Link
+        to="/setting"
+        style={{ color: "white", position: "absolute", top: 10, right: 35 }}
+      >
+        <SetOutline style={{ fontSize: "20px" }} />
+      </Link>
+
       <ConenctionStatus
         style={{
           position: "absolute",
-          top: 10,
+          top: 15,
           right: 10,
         }}
       />
-      <div className="header-container">
-        <h1 className="header">APLIKASI PATROLI</h1>
-        <h3>PT. Ungaran Sari Garments</h3>
-      </div>
+
+      <AppInfo />
+
       <Form
         layout="horizontal"
         mode="card"

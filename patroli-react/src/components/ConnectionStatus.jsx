@@ -29,8 +29,8 @@ const ConenctionStatus = ({ style, onConnected }) => {
   return (
     <div
       style={{
-        width: 15,
-        height: 15,
+        width: 10,
+        height: 10,
         borderRadius: "50%",
         backgroundColor: color[isConnected],
         ...style,
