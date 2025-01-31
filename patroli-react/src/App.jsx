@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
   useLocation,
+  useNavigate,
 } from "react-router";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Home from "./pages/Home";
@@ -11,6 +12,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import "./App.css";
 import { useEffect, useRef } from "react";
+import { Dialog } from "antd-mobile";
 
 const App = () => {
   return (
@@ -23,19 +25,31 @@ const App = () => {
 const AnimatedRoutes = () => {
   const location = useLocation();
   const nodeRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleBackButton = (event) => {
+    function handleBackButton(event) {
       event.preventDefault();
-      navigator.app.exitApp();
-    };
+
+      if (location.pathname === "/") {
+        Dialog.confirm({
+          title: "Konfirmasi",
+          content: "Apakah Anda yakin ingin keluar?",
+          confirmText: "Ya",
+          cancelText: "Tidak",
+          onConfirm: () => navigate("/login"),
+        });
+      }
+
+      if (location.pathname === "/register") navigate("/login");
+      if (location.pathname === "/login") navigator.app.exitApp();
+    }
 
     document.addEventListener("backbutton", handleBackButton, false);
-
     return () => {
       document.removeEventListener("backbutton", handleBackButton, false);
     };
-  }, []);
+  }, [location, navigate]);
 
   return (
     <TransitionGroup>
