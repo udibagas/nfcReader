@@ -10,9 +10,9 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import "./App.css";
 import { useEffect, useRef } from "react";
-import { Dialog } from "antd-mobile";
+import useLogout from "./hooks/useLogout";
+import "./App.css";
 
 const App = () => {
   return (
@@ -26,30 +26,22 @@ const AnimatedRoutes = () => {
   const location = useLocation();
   const nodeRef = useRef(null);
   const navigate = useNavigate();
+  const handleLogout = useLogout();
 
   useEffect(() => {
     function handleBackButton(event) {
       event.preventDefault();
-
-      if (location.pathname === "/") {
-        Dialog.confirm({
-          title: "Konfirmasi",
-          content: "Apakah Anda yakin ingin keluar?",
-          confirmText: "Ya",
-          cancelText: "Tidak",
-          onConfirm: () => navigate("/login"),
-        });
-      }
-
+      if (location.pathname === "/") handleLogout();
       if (location.pathname === "/register") navigate("/login");
       if (location.pathname === "/login") navigator.app.exitApp();
     }
 
     document.addEventListener("backbutton", handleBackButton, false);
+
     return () => {
       document.removeEventListener("backbutton", handleBackButton, false);
     };
-  }, [location, navigate]);
+  }, [handleLogout, navigate, location.pathname]);
 
   return (
     <TransitionGroup>

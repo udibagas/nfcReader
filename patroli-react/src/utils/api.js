@@ -42,15 +42,7 @@ export async function getUser() {
   return data;
 }
 
-export async function saveData(
-  { location, keterangan = [], keteranganTambahan },
-  files
-) {
-  if (keteranganTambahan) {
-    keterangan.push(keteranganTambahan);
-  }
-
-  const result = keterangan.join();
+export async function saveData({ location, result }, files) {
   const formData = new FormData();
   formData.append("location", location);
   formData.append("result", result);

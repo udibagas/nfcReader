@@ -1,37 +1,22 @@
-import { Dialog, NavBar } from "antd-mobile";
-import { useNavigate } from "react-router";
-import { logout } from "../utils/api";
+import { NavBar } from "antd-mobile";
 import ConenctionStatus from "./ConnectionStatus";
+import useLogout from "../hooks/useLogout";
+
+const Right = () => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "flex-end",
+      }}
+    >
+      <ConenctionStatus />
+    </div>
+  );
+};
 
 const HomeNavBar = () => {
-  const navigate = useNavigate();
-
-  function handleLogout() {
-    Dialog.confirm({
-      title: "Peringatan",
-      content: "Apakah Anda yakin ingin keluar?",
-      cancelText: "Tidak",
-      confirmText: "Ya",
-      onConfirm: () => {
-        logout()
-          .then(() => {
-            console.log("Logout success");
-          })
-          .catch((error) => {
-            Dialog.alert({
-              title: "Error",
-              content: error.response?.data?.message || error.message,
-              confirmText: "OK",
-            });
-          })
-          .finally(() => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            navigate("/login", { replace: true });
-          });
-      },
-    });
-  }
+  const handleLogout = useLogout();
 
   return (
     <NavBar
@@ -41,7 +26,7 @@ const HomeNavBar = () => {
         height: "60px",
       }}
       onBack={handleLogout}
-      right={<ConenctionStatus />}
+      right={<Right />}
     >
       SISTEM PATROLI USG
     </NavBar>
