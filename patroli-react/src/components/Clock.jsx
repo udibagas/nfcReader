@@ -27,8 +27,17 @@ const Clock = () => {
 
   return (
     <>
-      <h3 style={{ marginBottom: 0 }}>{date}</h3>
-      <h1 style={{ marginTop: 0 }}>{time}</h1>
+      <h1
+        style={{
+          margin: 0,
+          fontSize: "2.2rem",
+          color: "green",
+          fontFamily: "monospace",
+        }}
+      >
+        {time}
+      </h1>
+      <h3 style={{ margin: 0 }}>{date}</h3>
     </>
   );
 };

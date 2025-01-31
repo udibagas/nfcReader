@@ -176,6 +176,19 @@ const Home = () => {
     );
   }
 
+  function handleResetButton() {
+    if (!form.isFieldsTouched() && !location && !files.current.length) return;
+    Dialog.confirm({
+      title: "Peringatan",
+      content: "Apakah Anda yakin ingin mereset form?",
+      cancelText: "Tidak",
+      confirmText: "Ya",
+      onConfirm: () => {
+        resetForm();
+      },
+    });
+  }
+
   function resetForm() {
     form.resetFields();
     files.current = [];
@@ -184,12 +197,14 @@ const Home = () => {
   }
 
   return (
-    <div className="home-container">
+    <div className="home-container" style={{ backgroundColor: "#f1f1f1" }}>
       <HomeNavBar />
 
       <div className="main-content">
         <div className="header-container">
-          <h2>Selamat Pagi {user ? user.name : ""}!</h2>
+          <h3 style={{ marginTop: 0 }}>
+            Selamat Pagi {user ? user.name : ""}!
+          </h3>
           <Clock />
         </div>
 
@@ -197,6 +212,7 @@ const Home = () => {
           requiredMarkStyle="optional"
           onFinish={submitForm}
           form={form}
+          mode="card"
           footer={
             <>
               <Button
@@ -216,7 +232,7 @@ const Home = () => {
                     size="large"
                     fill="outline"
                     color="danger"
-                    onClick={resetForm}
+                    onClick={handleResetButton}
                   >
                     RESET
                   </Button>
@@ -237,17 +253,16 @@ const Home = () => {
             </>
           }
         >
-          <Form.Item label="Lokasi">
-            {location ? (
-              <div style={{ fontWeight: "bold", color: "green" }}>
-                {location}
-              </div>
-            ) : (
-              <div style={{ fontWeight: "bold", color: "red" }}>
-                Tempel NFC Tag
-              </div>
-            )}
-          </Form.Item>
+          <div
+            style={{
+              fontWeight: "bold",
+              textAlign: "center",
+              padding: "20px 10px",
+              color: location ? "green" : "red",
+            }}
+          >
+            {location || "TEMPEL NFC TAG"}
+          </div>
 
           <Form.Item name="keterangan" label="Keterangan">
             <Checkbox.Group>
@@ -264,7 +279,8 @@ const Home = () => {
           <Form.Item name="keteranganTambahan" label="Keterangan Tambahan">
             <TextArea
               placeholder="Tulis keterangan tambahan jika ada"
-              rows={2}
+              rows={1}
+              autoSize
             />
           </Form.Item>
 

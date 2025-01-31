@@ -137,7 +137,7 @@ const Register = () => {
           name="name"
           rules={[{ required: true, message: "Masukkan username Anda!" }]}
         >
-          <Input placeholder="Username" />
+          <Input placeholder="Username" clearable />
         </Form.Item>
 
         <Form.Item
@@ -145,7 +145,7 @@ const Register = () => {
           name="password"
           rules={[{ required: true, message: "Masukkan password Anda!" }]}
         >
-          <Input type="password" placeholder="Password" />
+          <Input type="password" placeholder="Password" clearable />
         </Form.Item>
       </Form>
     </div>
