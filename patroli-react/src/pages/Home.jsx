@@ -10,10 +10,11 @@ import {
 } from "antd-mobile";
 import { Navigate } from "react-router";
 import { base64ToBlob, getTemplates, saveData } from "../utils/api";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { CameraOutline } from "antd-mobile-icons";
 import Clock from "../components/Clock";
 import HomeNavBar from "../components/HomeNavBar";
+import ConnectionContext from "../context/ConnectionContext";
 
 const Home = () => {
   const user = JSON.parse(localStorage.getItem("user") || null);
@@ -22,6 +23,7 @@ const Home = () => {
   const [location, setLocation] = useState("");
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const isConnected = useContext(ConnectionContext);
 
   const [form] = Form.useForm();
   const files = useRef([]);
@@ -117,6 +119,15 @@ const Home = () => {
     const data = validateForm(values);
     if (!data) return;
 
+    if (!isConnected) {
+      Dialog.alert({
+        title: "Error",
+        content: "Anda berada diluar jaringan!",
+        confirmText: "OK",
+      });
+      return;
+    }
+
     Dialog.confirm({
       title: "Peringatan",
       content: "Apakah Anda yakin ingin menyimpan data?",
@@ -202,9 +213,9 @@ const Home = () => {
 
       <div className="main-content">
         <div className="header-container">
-          <h3 style={{ marginTop: 0 }}>
+          <h2 style={{ marginTop: 0 }}>
             Selamat Pagi {user ? user.name : ""}!
-          </h3>
+          </h2>
           <Clock />
         </div>
 
@@ -244,7 +255,7 @@ const Home = () => {
                     size="large"
                     type="submit"
                     loading={loading}
-                    loadingText="Mengirim data..."
+                    loadingText="Mengirim data"
                   >
                     SIMPAN
                   </Button>
@@ -264,7 +275,7 @@ const Home = () => {
             {location || "TEMPEL NFC TAG"}
           </div>
 
-          <Form.Item name="keterangan" label="Keterangan">
+          <Form.Item name="keterangan">
             <Checkbox.Group>
               <Space direction="vertical">
                 {template.map((item) => (
@@ -276,10 +287,10 @@ const Home = () => {
             </Checkbox.Group>
           </Form.Item>
 
-          <Form.Item name="keteranganTambahan" label="Keterangan Tambahan">
+          <Form.Item name="keteranganTambahan">
             <TextArea
               placeholder="Tulis keterangan tambahan jika ada"
-              rows={1}
+              rows={2}
               autoSize
             />
           </Form.Item>

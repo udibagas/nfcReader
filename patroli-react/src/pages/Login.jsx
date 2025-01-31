@@ -65,7 +65,7 @@ const Login = () => {
               block
               type="submit"
               loading={loading}
-              loadingText="Mengirim data..."
+              loadingText="Mengirim data"
             >
               LOGIN
             </Button>

@@ -99,7 +99,7 @@ const Register = () => {
               block
               type="submit"
               loading={loading}
-              loadingText="Mengirim data..."
+              loadingText="Mengirim data"
             >
               DAFTAR
             </Button>
