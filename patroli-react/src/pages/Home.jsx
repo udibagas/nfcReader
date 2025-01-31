@@ -256,6 +256,7 @@ const Home = () => {
                     type="submit"
                     loading={loading}
                     loadingText="Mengirim data"
+                    disabled={!isConnected}
                   >
                     SIMPAN
                   </Button>

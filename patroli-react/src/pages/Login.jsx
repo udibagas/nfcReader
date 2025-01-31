@@ -2,12 +2,14 @@ import { Link, Navigate, useNavigate } from "react-router";
 import { login } from "../utils/api";
 import { Button, Dialog, Divider, Form, Input } from "antd-mobile";
 import { LockOutline, SetOutline, UserOutline } from "antd-mobile-icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AppInfo from "../components/AppInfo";
+import ConnectionContext from "../context/ConnectionContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const isConnected = useContext(ConnectionContext);
 
   const handleFinish = async (values) => {
     setLoading(true);
@@ -56,6 +58,7 @@ const Login = () => {
               block
               type="submit"
               loading={loading}
+              disabled={!isConnected}
               loadingText="Mengirim data"
             >
               LOGIN

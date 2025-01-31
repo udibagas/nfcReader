@@ -99,6 +99,7 @@ const Register = () => {
               block
               type="submit"
               loading={loading}
+              disabled={!isConnected}
               loadingText="Mengirim data"
             >
               DAFTAR
