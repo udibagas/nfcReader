@@ -6,6 +6,7 @@ import {
   Space,
   Dialog,
   Image,
+  Grid,
 } from "antd-mobile";
 import { Navigate } from "react-router";
 import { base64ToBlob, getTemplates, saveData } from "../utils/api";
@@ -178,6 +179,13 @@ const Home = () => {
     );
   }
 
+  function resetForm() {
+    form.resetFields();
+    files.current = [];
+    setLocation("");
+    setImages([]);
+  }
+
   return (
     <div className="home-container">
       <HomeNavBar />
@@ -204,16 +212,31 @@ const Home = () => {
               >
                 <CameraOutline />
               </Button>
-              <Button
-                color="primary"
-                block
-                size="large"
-                type="submit"
-                loading={loading}
-                loadingText="Mengirim data..."
-              >
-                SIMPAN
-              </Button>
+              <Grid columns={2} gap={8}>
+                <Grid.Item>
+                  <Button
+                    block
+                    size="large"
+                    fill="outline"
+                    color="danger"
+                    onClick={resetForm}
+                  >
+                    RESET
+                  </Button>
+                </Grid.Item>
+                <Grid.Item>
+                  <Button
+                    block
+                    color="primary"
+                    size="large"
+                    type="submit"
+                    loading={loading}
+                    loadingText="Mengirim data..."
+                  >
+                    SIMPAN
+                  </Button>
+                </Grid.Item>
+              </Grid>
             </>
           }
         >
