@@ -17,11 +17,12 @@ const useLogout = () => {
             console.log("Logout success");
           })
           .catch((error) => {
-            Dialog.alert({
-              title: "Error",
-              content: error.response?.data?.message || error.message,
-              confirmText: "OK",
-            });
+            console.log(error);
+            // Dialog.alert({
+            //   title: "Error",
+            //   content: error.response?.data?.message || error.message,
+            //   confirmText: "OK",
+            // });
           })
           .finally(() => {
             localStorage.removeItem("token");

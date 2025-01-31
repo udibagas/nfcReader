@@ -34,7 +34,13 @@ export function register({ name, password, SiteId }) {
 }
 
 export function logout() {
-  return axiosInstance.post(`/api/logout`);
+  return axiosInstance.post(
+    `/api/logout`,
+    {},
+    {
+      timeout: 1000,
+    }
+  );
 }
 
 export async function getUser() {

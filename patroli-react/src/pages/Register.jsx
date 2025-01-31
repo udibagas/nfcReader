@@ -68,8 +68,8 @@ const Register = () => {
       <ConenctionStatus
         style={{
           position: "absolute",
-          top: 10,
-          right: 10,
+          top: 15,
+          right: 15,
         }}
         onConnected={() => {
           if (!sites.length) {

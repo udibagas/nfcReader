@@ -1,30 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import PropTypes from "prop-types";
-import { checkConnection } from "../utils/api";
+import ConnectionContext from "../context/ConnectionContext";
 
-const ConenctionStatus = ({ style, onConnected }) => {
-  const [isConnected, setIsConnected] = useState(null);
+const ConenctionStatus = ({ style }) => {
+  const isConnected = useContext(ConnectionContext);
 
   const color = {
     [true]: "lightgreen",
     [false]: "red",
     [null]: "gray",
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      checkConnection()
-        .then(() => {
-          setIsConnected(true);
-          onConnected?.();
-        })
-        .catch(() => {
-          setIsConnected(false);
-        });
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [onConnected]);
 
   return (
     <div
@@ -41,7 +26,6 @@ const ConenctionStatus = ({ style, onConnected }) => {
 
 ConenctionStatus.propTypes = {
   style: PropTypes.object,
-  onConnected: PropTypes.func,
 };
 
 export default ConenctionStatus;

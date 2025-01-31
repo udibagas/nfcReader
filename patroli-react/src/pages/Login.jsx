@@ -34,7 +34,7 @@ const Login = () => {
     <div className="login-container">
       <Link
         to="/setting"
-        style={{ color: "white", position: "absolute", top: 10, right: 35 }}
+        style={{ color: "white", position: "absolute", top: 10, right: 40 }}
       >
         <SetOutline style={{ fontSize: "20px" }} />
       </Link>
@@ -43,7 +43,7 @@ const Login = () => {
         style={{
           position: "absolute",
           top: 15,
-          right: 10,
+          right: 15,
         }}
       />
 
