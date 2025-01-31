@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { checkConnection } from "../utils/api";
+import ConenctionStatus from "../components/ConnectionStatus";
 
 const ConnectionContext = createContext(null);
 
@@ -19,6 +20,13 @@ export const ConnectionProvider = ({ children }) => {
 
   return (
     <ConnectionContext.Provider value={isConnected}>
+      <ConenctionStatus
+        style={{
+          position: "absolute",
+          top: 25,
+          right: 25,
+        }}
+      />
       {children}
     </ConnectionContext.Provider>
   );

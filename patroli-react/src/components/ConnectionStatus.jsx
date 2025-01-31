@@ -17,6 +17,7 @@ const ConenctionStatus = ({ style }) => {
         width: 10,
         height: 10,
         borderRadius: "50%",
+        zIndex: 9999,
         backgroundColor: color[isConnected],
         ...style,
       }}

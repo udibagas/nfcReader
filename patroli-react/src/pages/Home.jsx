@@ -269,6 +269,7 @@ const Home = () => {
               fontWeight: "bold",
               textAlign: "center",
               padding: "20px 10px",
+              fontSize: "1.3rem",
               color: location ? "green" : "red",
             }}
           >
@@ -296,7 +297,7 @@ const Home = () => {
           </Form.Item>
 
           {images.length > 0 && (
-            <Form.Item label="Foto">
+            <Form.Item>
               <Space direction="horizontal" wrap>
                 {images.map((image, index) => (
                   <Image

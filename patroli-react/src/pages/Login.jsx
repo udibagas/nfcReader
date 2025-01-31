@@ -4,7 +4,6 @@ import { Button, Dialog, Divider, Form, Input } from "antd-mobile";
 import { LockOutline, SetOutline, UserOutline } from "antd-mobile-icons";
 import { useState } from "react";
 import AppInfo from "../components/AppInfo";
-import ConenctionStatus from "../components/ConnectionStatus";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,18 +33,10 @@ const Login = () => {
     <div className="login-container">
       <Link
         to="/setting"
-        style={{ color: "white", position: "absolute", top: 10, right: 40 }}
+        style={{ color: "white", position: "absolute", top: 20, left: 25 }}
       >
         <SetOutline style={{ fontSize: "20px" }} />
       </Link>
-
-      <ConenctionStatus
-        style={{
-          position: "absolute",
-          top: 15,
-          right: 15,
-        }}
-      />
 
       <AppInfo />
 
