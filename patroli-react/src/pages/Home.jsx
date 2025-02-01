@@ -103,6 +103,10 @@ const Home = () => {
           "Pilih minimal satu keterangan atau tulis keterangan tambahan!"
         );
       }
+
+      if (files.current.length === 0) {
+        throw new Error("Ambil foto terlebih dahulu!");
+      }
     } catch (error) {
       Dialog.alert({
         title: "Error",
