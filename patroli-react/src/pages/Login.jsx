@@ -1,6 +1,6 @@
 import { Link, Navigate, useNavigate } from "react-router";
 import { login } from "../utils/api";
-import { Button, Dialog, Divider, Form, Input } from "antd-mobile";
+import { Button, Dialog, Form, Input } from "antd-mobile";
 import { LockOutline, SetOutline, UserOutline } from "antd-mobile-icons";
 import { useContext, useState } from "react";
 import AppInfo from "../components/AppInfo";
@@ -64,7 +64,7 @@ const Login = () => {
               LOGIN
             </Button>
 
-            <Divider>Atau</Divider>
+            {/* <Divider>Atau</Divider>
             <Button
               block
               color="primary"
@@ -75,7 +75,7 @@ const Login = () => {
               }}
             >
               DAFTAR
-            </Button>
+            </Button> */}
           </>
         }
       >
